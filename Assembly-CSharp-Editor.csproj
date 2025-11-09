@@ -571,16 +571,20 @@
       <HintPath>Library/PackageCache/com.unity.ext.nunit@031a54704bff/net40/unity-custom/nunit.framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.APIComparison.Framework">
+      <HintPath>Library/PackageCache/com.unity.package-validation-suite@536239bd7458/Lib/Editor/Unity.APIComparison.Framework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
       <HintPath>Library/PackageCache/com.unity.collab-proxy@b8d65294b30f/Lib/Editor/Unity.Plastic.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Plastic.Newtonsoft.Json">
-      <HintPath>Library/PackageCache/com.unity.collab-proxy@b8d65294b30f/Lib/Editor/Unity.Plastic.Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>Library/PackageCache/com.unity.package-validation-suite@536239bd7458/Lib/Editor/log4net.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Plastic.Newtonsoft.Json">
+      <HintPath>Library/PackageCache/com.unity.collab-proxy@b8d65294b30f/Lib/Editor/Unity.Plastic.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.IonicZip">
@@ -609,10 +613,6 @@
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
       <HintPath>Library/PackageCache/com.unity.collections@d49facba0036/Unity.Collections.Tests/System.Runtime.CompilerServices.Unsafe/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.APIComparison.Framework">
-      <HintPath>Library/PackageCache/com.unity.package-validation-suite@536239bd7458/Lib/Editor/Unity.APIComparison.Framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="log4netPlastic">
@@ -1139,8 +1139,8 @@
       <HintPath>Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.AI.Navigation">
-      <HintPath>Library/ScriptAssemblies/Unity.AI.Navigation.dll</HintPath>
+    <Reference Include="Unity.PackageValidationSuite.Editor.Extension">
+      <HintPath>Library/ScriptAssemblies/Unity.PackageValidationSuite.Editor.Extension.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Cinemachine">
@@ -1151,8 +1151,8 @@
       <HintPath>Library/ScriptAssemblies/Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.PackageValidationSuite.Editor.Extension">
-      <HintPath>Library/ScriptAssemblies/Unity.PackageValidationSuite.Editor.Extension.dll</HintPath>
+    <Reference Include="Unity.AI.Navigation">
+      <HintPath>Library/ScriptAssemblies/Unity.AI.Navigation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.PackageValidationSuite.Editor">
@@ -1227,10 +1227,6 @@
       <HintPath>Library/ScriptAssemblies/Unity.AI.Navigation.Editor.ConversionSystem.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
-      <HintPath>Library/ScriptAssemblies/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.TerrainTools">
       <HintPath>Library/ScriptAssemblies/Unity.TerrainTools.dll</HintPath>
       <Private>False</Private>
@@ -1241,6 +1237,10 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.Flow">
       <HintPath>Library/ScriptAssemblies/Unity.VisualScripting.Flow.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+      <HintPath>Library/ScriptAssemblies/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
