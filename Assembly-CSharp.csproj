@@ -48,22 +48,15 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/6000.2.6f2/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets/StarterAssets/Mobile/Scripts/VirtualInputs/UIVirtualTouchZone.cs" />
-    <Compile Include="Assets/StarterAssets/Mobile/Scripts/VirtualInputs/UIVirtualJoystick.cs" />
-    <Compile Include="Assets/StarterAssets/FirstPersonController/Scripts/TreeRuntimeInstance.cs" />
-    <Compile Include="Assets/StarterAssets/FirstPersonController/Scripts/TreeHarvest.cs" />
-    <Compile Include="Assets/StarterAssets/FirstPersonController/Scripts/TerrainTreeDynamicManager.cs" />
-    <Compile Include="Assets/StarterAssets/Mobile/Scripts/Utilities/MobileDisableAutoSwitchControls.cs" />
+    <Compile Include="Assets/Scripts/RigidbodyFirstPersonController.cs" />
+    <Compile Include="Assets/Scripts/TreeHarvest.cs" />
     <Compile Include="Assets/Forst/CTI Runtime Components/CTI Runtime Components URP 14plus/Scripts/CTI_URP_CustomWind.cs" />
-    <Compile Include="Assets/StarterAssets/FirstPersonController/Scripts/FirstPersonController.cs" />
-    <Compile Include="Assets/StarterAssets/Mobile/Scripts/VirtualInputs/UIVirtualButton.cs" />
+    <Compile Include="Assets/Scripts/BasicRigidBodyPush.cs" />
+    <Compile Include="Assets/Scripts/TreeRuntimeInstance.cs" />
+    <Compile Include="Assets/Scripts/TerrainTreeDynamicManager.cs" />
+    <Compile Include="Assets/Scripts/TerrainTreeConverterRuntime.cs" />
     <Compile Include="Assets/TutorialInfo/Scripts/Readme.cs" />
-    <Compile Include="Assets/StarterAssets/FirstPersonController/Scripts/BasicRigidBodyPush.cs" />
-    <Compile Include="Assets/StarterAssets/FirstPersonController/Scripts/RigidbodyFirstPersonController.cs" />
-    <Compile Include="Assets/StarterAssets/Mobile/Scripts/CanvasInputs/UICanvasControllerInput.cs" />
-    <Compile Include="Assets/Polytope Studio/Lowpoly_Demos/Environment_Free/Helpers/MouseLook.cs" />
-    <Compile Include="Assets/Polytope Studio/Lowpoly_Demos/Environment_Free/Helpers/PlayerMovement.cs" />
-    <Compile Include="Assets/StarterAssets/FirstPersonController/Scripts/TerrainTreeConverterRuntime.cs" />
+    <Compile Include="Assets/Scripts/FirstPersonController.cs" />
     <Compile Include="Assets/StarterAssets/InputSystem/StarterAssetsInputs.cs" />
   </ItemGroup>
   <ItemGroup>
