@@ -28,11 +28,9 @@ namespace StarterAssets
         public float TopClamp = 90.0f;
         public float BottomClamp = -90.0f;
 
-        // camera
         private float _cinemachineTargetPitch;
         private float _rotationVelocity;
 
-        // input & components
         private StarterAssetsInputs _input;
         private Rigidbody _rb;
 #if ENABLE_INPUT_SYSTEM
@@ -116,10 +114,11 @@ namespace StarterAssets
                 Vector3 v = _rb.linearVelocity;
                 v.y = 0;
                 _rb.linearVelocity = v;
-
+        
                 _rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
             }
         }
+
 
         private void CameraRotation()
         {
