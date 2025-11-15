@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 977e3e804ea7e4c40a41dc365c395eec
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 66256
+  packageName: The Axe
+  packageVersion: 1.0
+  assetPath: Assets/3D Models/Props/Weapons/Axe/Example/Scripts/Editor/ShowRoomEditor.cs
+  uploadId: 741250
