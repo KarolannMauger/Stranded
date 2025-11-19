@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 48ea7280bbe3f7a47b244b18dc452b2c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 215891
+  packageName: The Furry Bear
+  packageVersion: 1.0
+  assetPath: Assets/Bear/Animations/Bear.controller
+  uploadId: 486591

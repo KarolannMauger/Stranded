@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 478b2bef36208bb4888965265b078404
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 215891
+  packageName: The Furry Bear
+  packageVersion: 1.0
+  assetPath: Assets/Bear/Materials/Bear.mat
+  uploadId: 486591
