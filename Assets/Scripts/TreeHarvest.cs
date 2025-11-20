@@ -121,7 +121,12 @@ public class TreeHarvest : MonoBehaviour
     private void Harvest()
     {
         Debug.Log($"[TreeHarvest] Arbre recolte/detruit: {name}");
-
+    
+        if (GameInventory.Instance != null)
+        {
+            GameInventory.Instance.AddWood(1);
+        }
+    
         if (_runtime != null && _runtime.manager != null)
         {
             _runtime.manager.HarvestTree(_runtime.treeIndex);
@@ -131,6 +136,7 @@ public class TreeHarvest : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
 
     private void OnDrawGizmosSelected()
     {
