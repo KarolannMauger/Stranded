@@ -7,8 +7,8 @@ public class MainMenu : MonoBehaviour
     private SceneController _sceneController; // manage les scenes avec ceci pour fadeout
 
     [Header("Nom de la scène de jeu")]
-    public string gameSceneName = "Level";
-    public string menuSceneName = "Start";
+    public string gameSceneName = "SampleScene";
+    public string menuSceneName = "Scenes/StartScene";
     // Assignée au bouton "Jouer"
     public void OnPlay()
     {
