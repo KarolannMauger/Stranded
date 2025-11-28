@@ -46,7 +46,6 @@ public class ResourceHarvest : MonoBehaviour
 
         if (Keyboard.current.fKey.wasPressedThisFrame)
         {
-            Debug.Log("[ResourceHarvest] F press detected → " + name);
             StartCoroutine(HarvestRoutine());
         }
     }
@@ -55,6 +54,7 @@ public class ResourceHarvest : MonoBehaviour
     {
         _isCollecting = true;
 
+        
         yield return new WaitForSeconds(0.05f);
 
         MushroomInfo mushInfo = GetComponent<MushroomInfo>();
@@ -71,7 +71,7 @@ public class ResourceHarvest : MonoBehaviour
             }
         }
 
-        if (_runtime != null && _runtime.manager != null)
+        if (_runtime != null && _runtime.manager != null && _runtime.treeIndex >= 0)
         {
             _runtime.manager.HarvestTree(_runtime.treeIndex);
         }
@@ -80,7 +80,6 @@ public class ResourceHarvest : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
