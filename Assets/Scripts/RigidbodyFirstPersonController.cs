@@ -87,6 +87,8 @@ namespace StarterAssets
                 GroundedRadius,
                 GroundLayers,
                 QueryTriggerInteraction.Ignore);
+            
+            var isGoingUp = Vector3.Dot(Vector3.up, _rb.linearVelocity) > 0.001f;
         }
 
         private void Move()
