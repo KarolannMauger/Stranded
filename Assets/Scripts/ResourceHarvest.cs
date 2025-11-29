@@ -46,6 +46,7 @@ public class ResourceHarvest : MonoBehaviour
 
         if (Keyboard.current.fKey.wasPressedThisFrame)
         {
+            Debug.Log($"[ResourceHarvest] F pressed on {name}, dist={dist}");
             StartCoroutine(HarvestRoutine());
         }
     }
@@ -54,10 +55,10 @@ public class ResourceHarvest : MonoBehaviour
     {
         _isCollecting = true;
 
-        
         yield return new WaitForSeconds(0.05f);
 
         MushroomInfo mushInfo = GetComponent<MushroomInfo>();
+        WaterInfo    waterInfo = GetComponent<WaterInfo>();
 
         if (GameInventory.Instance != null)
         {
@@ -65,10 +66,20 @@ public class ResourceHarvest : MonoBehaviour
             {
                 GameInventory.Instance.EatMushroom(mushInfo.mushroomId);
             }
-            else
+            else if (waterInfo == null)
             {
                 GameInventory.Instance.AddRock(1);
             }
+        }
+
+        if (mushInfo != null)
+        {
+            MushroomEffectSwitcher.Apply(mushInfo.mushroomId);
+        }
+        else if (waterInfo != null)
+        {
+            WaterEffectSwitcher.Apply(waterInfo.waterId);
+            Debug.Log($"[ResourceHarvest] Eau récoltée : {waterInfo.waterId}");
         }
 
         if (_runtime != null && _runtime.manager != null && _runtime.treeIndex >= 0)
@@ -77,8 +88,13 @@ public class ResourceHarvest : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            if (waterInfo == null)
+            {
+                Destroy(gameObject);
+            }
         }
+
+        _isCollecting = false;
     }
 
 #if UNITY_EDITOR
