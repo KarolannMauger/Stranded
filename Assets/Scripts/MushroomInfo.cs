@@ -2,6 +2,6 @@ using UnityEngine;
 
 public class MushroomInfo : MonoBehaviour
 {
-    [Tooltip("Id du type de champignon (ex : Toxico1, Good01, Toxic02...)")]
-    public string mushroomId = "Default";
+    [Tooltip("Id du type de champignon (ex : Toxic1, Good1, Toxic2...)")]
+    public string mushroomId = MushroomIds.Good1;
 }
