@@ -5,7 +5,10 @@ using System.Collections;
 public class ResourceHarvest : MonoBehaviour
 {
     [Header("Harvest Settings")]
+    [Tooltip("Distance max pour pouvoir recolter")]
     public float interactionDistance = 2f;
+
+    [Tooltip("UI a afficher quand le joueur est a portee (facultatif)")]
     public GameObject interactionUI;
 
     private Transform _player;
@@ -58,28 +61,20 @@ public class ResourceHarvest : MonoBehaviour
         yield return new WaitForSeconds(0.05f);
 
         MushroomInfo mushInfo = GetComponent<MushroomInfo>();
-        WaterInfo    waterInfo = GetComponent<WaterInfo>();
 
         if (GameInventory.Instance != null)
         {
             if (mushInfo != null)
             {
                 GameInventory.Instance.EatMushroom(mushInfo.mushroomId);
+                MushroomEffectSwitcher.Apply(mushInfo.mushroomId);
+                Debug.Log($"[ResourceHarvest] Champignon recolte : {mushInfo.mushroomId}");
             }
-            else if (waterInfo == null)
+            else
             {
                 GameInventory.Instance.AddRock(1);
+                Debug.Log("[ResourceHarvest] Roche recoltee (+1 rock)");
             }
-        }
-
-        if (mushInfo != null)
-        {
-            MushroomEffectSwitcher.Apply(mushInfo.mushroomId);
-        }
-        else if (waterInfo != null)
-        {
-            WaterEffectSwitcher.Apply(waterInfo.waterId);
-            Debug.Log($"[ResourceHarvest] Eau récoltée : {waterInfo.waterId}");
         }
 
         if (_runtime != null && _runtime.manager != null && _runtime.treeIndex >= 0)
@@ -88,10 +83,7 @@ public class ResourceHarvest : MonoBehaviour
         }
         else
         {
-            if (waterInfo == null)
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
 
         _isCollecting = false;
