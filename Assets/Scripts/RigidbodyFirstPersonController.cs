@@ -87,8 +87,6 @@ namespace StarterAssets
                 GroundedRadius,
                 GroundLayers,
                 QueryTriggerInteraction.Ignore);
-            
-            var isGoingUp = Vector3.Dot(Vector3.up, _rb.linearVelocity) > 0.001f;
         }
 
         private void Move()
@@ -116,11 +114,14 @@ namespace StarterAssets
                 Vector3 v = _rb.linearVelocity;
                 v.y = 0;
                 _rb.linearVelocity = v;
-        
+
                 _rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
             }
+            else if (_input.jump)
+            {
+                _input.jump = false;
+            }
         }
-
 
         private void CameraRotation()
         {
