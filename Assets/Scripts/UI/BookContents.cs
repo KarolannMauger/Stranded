@@ -10,6 +10,9 @@ public class BookContents : MonoBehaviour
     [SerializeField] private TMP_Text rightSide;
     [Space] [SerializeField] private TMP_Text leftPagination;
     [SerializeField] private TMP_Text rightPagination;
+    public AudioSource audioSource;
+    [Header("SoundFX")]
+    public AudioClip pageSound;
     
     private void OnValidate()
     {
@@ -42,6 +45,8 @@ public class BookContents : MonoBehaviour
     // changes page number backward for content display
     public void PreviousPage()
     {
+        int oldPage = leftSide.pageToDisplay;
+        
         if (leftSide.pageToDisplay < 1)
         {
             leftSide.pageToDisplay = 1;
@@ -52,6 +57,9 @@ public class BookContents : MonoBehaviour
         else
             leftSide.pageToDisplay = 1;
         rightSide.pageToDisplay = leftSide.pageToDisplay + 1;
+
+        if (leftSide.pageToDisplay != oldPage) PlayPageSound();
+
         UpdatePagination();
     }
 
@@ -59,6 +67,8 @@ public class BookContents : MonoBehaviour
     // changes page number forward for content display
     public void NextPage()
     {
+        int oldPage = leftSide.pageToDisplay;
+
         if (rightSide.pageToDisplay >= rightSide.textInfo.pageCount)
             return;
         if (leftSide.pageToDisplay >= leftSide.textInfo.pageCount - 1)
@@ -71,6 +81,17 @@ public class BookContents : MonoBehaviour
             leftSide.pageToDisplay += 2;
             rightSide.pageToDisplay = leftSide.pageToDisplay + 1;
         }
+
+        if (leftSide.pageToDisplay != oldPage) PlayPageSound();
+        
         UpdatePagination();
+    }
+
+    private void PlayPageSound()
+    {
+        if (audioSource != null && pageSound != null)
+        {
+            audioSource.PlayOneShot(pageSound);
+        }
     }
 }
