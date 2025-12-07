@@ -28,8 +28,15 @@ namespace StarterAssets
         public float TopClamp = 90.0f;
         public float BottomClamp = -90.0f;
 
+         [Header("Audio")]
+        public AudioSource audioSource;
+        public AudioClip jumpSound;
+        public AudioClip footstepSound;
+        public float footstepCooldown = 0.4f;
+
         private float _cinemachineTargetPitch;
         private float _rotationVelocity;
+        private bool _isWalking = false;
 
         private StarterAssetsInputs _input;
         private Rigidbody _rb;
@@ -61,6 +68,21 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM
             _playerInput = GetComponent<PlayerInput>();
 #endif
+
+            
+            if (audioSource == null)
+            {
+                audioSource = GetComponent<AudioSource>();
+                if (audioSource == null)
+                    audioSource = GetComponentInChildren<AudioSource>();
+            }
+
+            
+            if (audioSource != null)
+            {
+                audioSource.playOnAwake = false;
+                audioSource.loop = false;
+            }
         }
 
         private void Update()
@@ -94,16 +116,65 @@ namespace StarterAssets
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
             if (_input.move == Vector2.zero)
                 targetSpeed = 0.0f;
+                
 
             Vector3 inputDir = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-            if (inputDir.sqrMagnitude < 0.01f)
+           
+           bool isMoving = inputDir.sqrMagnitude >= 0.01f && targetSpeed > 0f;
+              if (!isMoving)
+            {
+                
+                if (_isWalking)
+                {
+                    StopFootstepSound();
+                    _isWalking = false;
+                }
                 return;
+            }
 
             Vector3 moveDir = transform.right * inputDir.x + transform.forward * inputDir.z;
 
             Vector3 move = moveDir * (targetSpeed * Time.deltaTime);
             _rb.MovePosition(_rb.position + move);
+
+             if (Grounded && targetSpeed > 0f)
+              {
+                if (!_isWalking)
+                {
+                    PlayFootstepLoopSound();
+                    _isWalking = true;
+                }
+            }
+            else
+            {
+                if (_isWalking)
+                {
+                    StopFootstepSound();
+                    _isWalking = false;
+                }
+            }
         }
+            private void PlayFootstepLoopSound()
+            {
+                if (audioSource != null && footstepSound != null)
+                {
+                     if (!audioSource.isPlaying)
+                {
+                    audioSource.clip = footstepSound;
+                    audioSource.loop = true;
+                    audioSource.Play();
+                }
+                }
+            }
+            private void StopFootstepSound()
+            {
+                if (audioSource != null && audioSource.isPlaying)
+                {
+                    audioSource.Stop();
+                    audioSource.loop = false;
+                    audioSource.clip = null;
+                }
+            }
 
         private void Jump()
         {
@@ -116,12 +187,23 @@ namespace StarterAssets
                 _rb.linearVelocity = v;
 
                 _rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+                PlayJumpSound();
             }
             else if (_input.jump)
             {
                 _input.jump = false;
             }
         }
+
+
+        private void PlayJumpSound()
+        {
+            if (audioSource != null && jumpSound != null)
+            {
+                audioSource.PlayOneShot(jumpSound);
+            }
+        }
+
 
         private void CameraRotation()
         {

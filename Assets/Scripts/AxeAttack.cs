@@ -4,7 +4,8 @@ public class AxeAttack : MonoBehaviour
 {
     [Header("References")]
     public Animator axeAnimator;
-    public Transform cameraTransform; 
+    public Transform cameraTransform;
+    public AudioSource audioSource; 
 
     [Header("Hit Settings")]
     public float hitDistance = 3f;
@@ -13,6 +14,9 @@ public class AxeAttack : MonoBehaviour
 
     [Header("Timing")]
     public float attackCooldown = 0.35f;
+
+     [Header("Audio")]
+    public AudioClip hitSound;
 
     private bool canAttack = true;
 
@@ -50,7 +54,19 @@ public class AxeAttack : MonoBehaviour
             if (tree != null)
             {
                 tree.TakeDamage(damagePerHit, cameraTransform);
+                PlayHitSound();
             }
+        }
+    }
+      private void PlayHitSound()
+    {
+        if (audioSource != null && hitSound != null)
+        {
+            audioSource.PlayOneShot(hitSound);
+        }
+        else
+        {
+            Debug.LogWarning("[AxeAttack] AudioSource ou hitSound non assigne.");
         }
     }
 
