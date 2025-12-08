@@ -32,8 +32,7 @@ public class UIController : MonoBehaviour
         // Tab will open/close book
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (!IsHelpOpen)
-                ToggleBook();
+            ToggleBook();
         }
         
         // ESC will open/close help menu
@@ -43,7 +42,7 @@ public class UIController : MonoBehaviour
         }
     }
 
-    void ToggleBook()
+    public void ToggleBook()
     {
         // Closes Help If Opened
         if (IsHelpOpen)
@@ -57,7 +56,7 @@ public class UIController : MonoBehaviour
         UpdateControllers();
     }
     
-    void ToggleHelp()
+    public void ToggleHelp()
     {
         // Closes Book If Opened
         if (IsBookOpen)
