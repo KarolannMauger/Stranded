@@ -34,7 +34,7 @@ public class MissionManager : MonoBehaviour
     // initial mission : find ressources
     public MissionState currentMission = MissionState.GatherResources;
     
-    private float initialShackDistance;
+    private float shackMissionStartDistance;
     private bool midDistanceDialogueTriggered = false;
     private bool objectiveChanged = false;
 
@@ -50,11 +50,6 @@ public class MissionManager : MonoBehaviour
 
     private void Start()
     {
-        if (shackDoor != null && playerCapsule != null)
-        {
-            initialShackDistance = Vector3.Distance(playerCapsule.transform.position, shackDoor.transform.position);
-        }
-
         UpdateObjectiveDisplay();
     }
 
@@ -136,6 +131,13 @@ public class MissionManager : MonoBehaviour
 
         // next mission
         currentMission = MissionState.FindShack;
+        
+        // calculate halway distance from fire point
+        if (shackDoor != null && playerCapsule != null)
+        {
+            shackMissionStartDistance = Vector3.Distance(playerCapsule.transform.position, shackDoor.transform.position);
+        }
+        
         UpdateObjectiveDisplay();
     }
 
@@ -147,17 +149,18 @@ public class MissionManager : MonoBehaviour
         float distance = Vector3.Distance(playerCapsule.transform.position, shackDoor.transform.position);
 
         // halfway on the road, player get halfway dialogue
-        float midDistance = initialShackDistance / 2f;
+        float midDistance = shackMissionStartDistance / 2f;
         if (!midDistanceDialogueTriggered && distance <= midDistance)
         {
             midDistanceDialogueTriggered = true;
             StartCoroutine(TriggerMidDistanceDialogue());
         }
 
-        // when near shack, prompts player to find radio
+        // when near shack, prompts player to enter and find radio
         if (!objectiveChanged && distance < 10f)
         {
             objectiveChanged = true;
+            currentMission = MissionState.Completed;
             objectivesDisplay.UpdateObjective("Enter the shack and find the radio");
         }
         else if (!objectiveChanged)
