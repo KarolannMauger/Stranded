@@ -8,7 +8,6 @@ public class Dialogue : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
     public string[] lines;
-
     public float textSpeed = 0.05f;
     private int index;
 
@@ -69,5 +68,11 @@ public class Dialogue : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+
+    // public method to check if dialogue active
+    public bool IsDialogueActive()
+    {
+        return gameObject.activeSelf;
     }
 }
