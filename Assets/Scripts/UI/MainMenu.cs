@@ -9,11 +9,20 @@ public class MainMenu : MonoBehaviour
     [Header("Nom de la scène de jeu")]
     public string gameSceneName = "SampleScene";
     public string menuSceneName = "Scenes/StartScene";
+
+    void Start()
+    {
+        // S'assurer que le curseur est visible et déverrouillé dans les menus
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
     // Assignée au bouton "Jouer"
     public void OnPlay()
     {
         if (!string.IsNullOrEmpty(gameSceneName))
         {
+            Cursor.visible = false;
             _sceneController.LoadScene(gameSceneName);
         }
     }
@@ -23,6 +32,9 @@ public class MainMenu : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(menuSceneName))
         {
+            // S'assurer que le curseur est visible avant de charger le menu
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
             _sceneController.LoadScene(menuSceneName);
         }
     }
