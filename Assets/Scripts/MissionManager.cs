@@ -14,7 +14,7 @@ public class MissionManager : MonoBehaviour
     public int requiredRocks = 10;
 
     [Header("Mission 2 - Build Fire")]
-    public GameObject fireLocation; // Position du feu
+    public GameObject fireLocation;
     public GameObject playerCapsule;
     public string[] fireDialogueLines;
 
@@ -22,7 +22,7 @@ public class MissionManager : MonoBehaviour
     public GameObject shackDoor;
     public string[] midDistanceDialogueLines;
 
-    // États des missions
+    // mission states
     public enum MissionState
     {
         GatherResources,
@@ -31,6 +31,7 @@ public class MissionManager : MonoBehaviour
         Completed
     }
 
+    // initial mission : find ressources
     public MissionState currentMission = MissionState.GatherResources;
     
     private float initialShackDistance;
@@ -88,7 +89,7 @@ public class MissionManager : MonoBehaviour
                 $"Rocks: {rocks}/{requiredRocks}"
             );
 
-            // Vérifier si les ressources sont complètes
+            // If ressources are complete -> prompt go to fire
             if (wood >= requiredWood && rocks >= requiredRocks)
             {
                 AdvanceToFireMission();
@@ -96,12 +97,14 @@ public class MissionManager : MonoBehaviour
         }
     }
 
+    // prompt go to fire 
     private void AdvanceToFireMission()
     {
         currentMission = MissionState.BuildFire;
         UpdateObjectiveDisplay();
     }
 
+    // update distance between player and fire on screen
     private void CheckFireDistance()
     {
         if (playerCapsule == null || fireLocation == null) return;
@@ -110,12 +113,13 @@ public class MissionManager : MonoBehaviour
         objectivesDisplay.UpdateObjective($"Find a place to build a fire\n({distance:F1} m to the beach)");
     }
 
-    // Appelé par FireTrigger quand le joueur active le feu
+    // when fire is "built" prompts dialogue
     public void OnFireBuilt()
     {
         StartCoroutine(FireBuiltSequence());
     }
 
+    // display fire complete mission dialogue
     private IEnumerator FireBuiltSequence()
     {
         yield return new WaitForSeconds(0.1f);
@@ -130,18 +134,19 @@ public class MissionManager : MonoBehaviour
             }
         }
 
-        // Passer à la mission suivante
+        // next mission
         currentMission = MissionState.FindShack;
         UpdateObjectiveDisplay();
     }
 
+    // update distance between player and shack on screen
     private void CheckShackDistance()
     {
         if (playerCapsule == null || shackDoor == null) return;
 
         float distance = Vector3.Distance(playerCapsule.transform.position, shackDoor.transform.position);
 
-        // Dialogue à mi-distance
+        // halfway on the road, player get halfway dialogue
         float midDistance = initialShackDistance / 2f;
         if (!midDistanceDialogueTriggered && distance <= midDistance)
         {
@@ -149,11 +154,11 @@ public class MissionManager : MonoBehaviour
             StartCoroutine(TriggerMidDistanceDialogue());
         }
 
-        // Changer objectif près de la cabane
+        // when near shack, prompts player to find radio
         if (!objectiveChanged && distance < 10f)
         {
             objectiveChanged = true;
-            objectivesDisplay.UpdateObjective("Enter the shack");
+            objectivesDisplay.UpdateObjective("Enter the shack and find the radio");
         }
         else if (!objectiveChanged)
         {
@@ -161,6 +166,7 @@ public class MissionManager : MonoBehaviour
         }
     }
 
+    // triggers dialogue
     private IEnumerator TriggerMidDistanceDialogue()
     {
         yield return new WaitForSeconds(0.1f);
@@ -171,21 +177,19 @@ public class MissionManager : MonoBehaviour
         }
     }
 
+    // display the current objective
     private void UpdateObjectiveDisplay()
     {
         switch (currentMission)
         {
             case MissionState.GatherResources:
-                // Sera mis à jour dans CheckResourcesGathered()
                 break;
 
             case MissionState.BuildFire:
-                // Sera mis à jour dans CheckFireDistance()
                 CheckFireDistance();
                 break;
 
             case MissionState.FindShack:
-                // Sera mis à jour dans CheckShackDistance()
                 break;
         }
     }

@@ -78,6 +78,8 @@ public class FireTrigger : MonoBehaviour
         }
     }
 
+
+    // prompt player to press key if correct mission going on
     private void OnGUI()
     {
         if (enter && !fireBuilt && 

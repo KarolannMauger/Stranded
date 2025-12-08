@@ -57,10 +57,18 @@ public class EndGameTrigger : MonoBehaviour
     {
         if (!enter || dialogueTriggered) return;
 
-        dialogueTriggered = true;
-        StartCoroutine(TriggerEndGameSequence());
+        // if mission is not null and "completed" mission
+        if (MissionManager.Instance != null)
+        {
+            if (MissionManager.Instance.currentMission == MissionManager.MissionState.Completed)
+            {
+                dialogueTriggered = true;
+                StartCoroutine(TriggerEndGameSequence());
+            }
+        }
     }
 
+    // trigger end sequence: back and forth dialogue + radio sound -> goes to end screen
     private IEnumerator TriggerEndGameSequence()
     {
         if (radioStaticSound != null && audioSource != null)
@@ -97,7 +105,10 @@ public class EndGameTrigger : MonoBehaviour
 
     private void OnGUI()
     {
-        if (enter && !dialogueTriggered)
+        // Only prompts player when it's the right mission
+        if (enter && !dialogueTriggered && 
+            MissionManager.Instance != null && 
+            MissionManager.Instance.currentMission == MissionManager.MissionState.Completed)
         {
             GUIStyle style = new GUIStyle(GUI.skin.label);
             style.fontSize = fontSize;
