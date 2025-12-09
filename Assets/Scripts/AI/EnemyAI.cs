@@ -9,6 +9,7 @@ public class EnemyAI : MonoBehaviour
     public Transform player;
     public LayerMask whatIsPlayer;
     public Animator animator;
+    public AudioSource growlAudio;
 
     // Patrol variables
     private Vector3 walkPoint;
@@ -26,12 +27,14 @@ public class EnemyAI : MonoBehaviour
     private bool playerInAttackRange;
 
     public string gameOverSceneName = "GameOverScene";
+    private bool isGrowling;
 
     private void Awake()
     {
         player = GameObject.Find("PlayerCapsule").transform;
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        growlAudio = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -41,6 +44,7 @@ public class EnemyAI : MonoBehaviour
         {
             agent.SetDestination(transform.position);
             ResetAnimations();
+            StopGrowling();
             return;
         }
 
@@ -61,6 +65,8 @@ public class EnemyAI : MonoBehaviour
 
     private void Patrol()
     {
+        StopGrowling();
+
         // Search for a walk point if not set
         if (!walkPointSet)
             SearchWalkPoint();
@@ -98,6 +104,8 @@ public class EnemyAI : MonoBehaviour
 
     private void ChasePlayer()
     {
+        StartGrowling();
+
         // Chase the player when detected
         agent.SetDestination(player.position);
         ResetAnimations();
@@ -106,6 +114,8 @@ public class EnemyAI : MonoBehaviour
 
     private void AttackPlayer()
     {
+        StartGrowling();
+
         // Stop moving and face the player
         agent.SetDestination(transform.position);
         transform.LookAt(player);
@@ -132,6 +142,24 @@ public class EnemyAI : MonoBehaviour
     {
         animator.SetBool("isWalking", false);
         animator.SetBool("isRunning", false);
+    }
+
+    private void StartGrowling()
+    {
+        if (growlAudio != null && !isGrowling)
+        {
+            growlAudio.Play();
+            isGrowling = true;
+        }
+    }
+
+    private void StopGrowling()
+    {
+        if (growlAudio != null && isGrowling)
+        {
+            growlAudio.Stop();
+            isGrowling = false;
+        }
     }
 
     private void LoadGameOver()
