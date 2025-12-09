@@ -8,7 +8,6 @@ public class Dialogue : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
     public string[] lines;
-
     public float textSpeed = 0.05f;
     private int index;
 
@@ -23,6 +22,7 @@ public class Dialogue : MonoBehaviour
     {
         if (!gameObject.activeSelf) return;
 
+        // clic to skip typing effect or go to next line
         if (Input.GetMouseButtonDown(0))
         {
             if (textComponent.text == lines[index])
@@ -37,6 +37,7 @@ public class Dialogue : MonoBehaviour
         }
     }
 
+    // shows dialogue box and start writing the lines
     public void StartDialogue(string[] newLines)
     {
         lines = newLines;
@@ -48,6 +49,7 @@ public class Dialogue : MonoBehaviour
         StartCoroutine(TypeLine());
     }
 
+    // typing effect on dialogue
     IEnumerator TypeLine()
     {
         foreach (char c in lines[index].ToCharArray())
@@ -57,6 +59,7 @@ public class Dialogue : MonoBehaviour
         }
     }
 
+    // go to next line or removes dialogue box
     void NextLine()
     {
         if (index < lines.Length - 1)
@@ -69,5 +72,11 @@ public class Dialogue : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+
+    // public method to check if dialogue active
+    public bool IsDialogueActive()
+    {
+        return gameObject.activeSelf;
     }
 }

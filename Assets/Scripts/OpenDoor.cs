@@ -17,6 +17,10 @@ public class OpenDoor : MonoBehaviour
     [Tooltip("Réfère à l'action 'Interact' dans ton Input Actions Asset")]
     public InputActionReference interactAction;
 
+    [Header("UI Style")]
+    public Font customFont;
+    public int fontSize = 30;
+
     private bool open;
     private bool enter;
     private Vector3 defaultRot;
@@ -96,10 +100,21 @@ public class OpenDoor : MonoBehaviour
     {
         if (enter)
         {
-            // Texte simple pour l'instant (on pourrait lier dynamiquement le binding plus tard)
+            // personnalized style
+            GUIStyle style = new GUIStyle(GUI.skin.label);
+            style.fontSize = fontSize;
+            style.alignment = TextAnchor.MiddleCenter;
+
+            // custom font if assigned
+            if (customFont != null)
+            {
+                style.font = customFont;
+            }
+
             GUI.Label(
-                new Rect(Screen.width / 2 - 75, Screen.height - 100, 200, 30),
-                "Press 'E' to open the door"
+                new Rect(Screen.width / 2 - 100, Screen.height - 200, 250, 100),
+                "Press 'E' to open the door",
+                style
             );
         }
     }
