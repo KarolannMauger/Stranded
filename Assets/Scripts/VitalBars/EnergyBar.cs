@@ -20,6 +20,7 @@ public class EnergyBar : MonoBehaviour
 
     private void Start()
     {
+        // Initialize UI
         if (energySlider != null)
         {
             energySlider.maxValue = maxEnergy;
@@ -27,45 +28,24 @@ public class EnergyBar : MonoBehaviour
         }
     }
 
-    public void UpdateEnergy(
-        float hungerPercent,
-        float thirstPercent,
-        bool isDayTime
-    )
+    public void UpdateEnergy(float hungerPercent, float thirstPercent)
     {
         if (isGameOver)
             return;
 
+        // Adjust energy based on hunger and thirst percentages
         if (thirstPercent <= 0f)
-        {
             energy -= 4f * Time.deltaTime;
-            energy = Mathf.Clamp(energy, 0f, maxEnergy);
-            UpdateUI();
-            CheckGameOver();
-            return;
-        }
         else if (hungerPercent <= 0f)
-        {
             energy -= 2f * Time.deltaTime;
-            energy = Mathf.Clamp(energy, 0f, maxEnergy);
-            UpdateUI();
-            CheckGameOver();
-            return;
-        }
-
-        if (hungerPercent >= 80f && thirstPercent >= 80f)
-        {
+        else if (hungerPercent >= 80f && thirstPercent >= 80f)
             energy += energyRegenRate * Time.deltaTime;
-            energy = Mathf.Clamp(energy, 0f, maxEnergy);
-            UpdateUI();
-        }
         else
-        {
             energy -= energyDrainRate * Time.deltaTime;
-            energy = Mathf.Clamp(energy, 0f, maxEnergy);
-            UpdateUI();
-            CheckGameOver();
-        }
+
+        energy = Mathf.Clamp(energy, 0f, maxEnergy);
+        UpdateUI();
+        CheckGameOver();
     }
 
     private void UpdateUI()
@@ -76,6 +56,7 @@ public class EnergyBar : MonoBehaviour
 
     private void CheckGameOver()
     {
+        // Trigger game over if energy reaches zero
         if (energy <= 0f && !isGameOver)
         {
             isGameOver = true;
