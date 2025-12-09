@@ -4,20 +4,26 @@ using UnityEngine.SceneManagement;
 
 public class EnemyAI : MonoBehaviour
 {
+    // References
     public NavMeshAgent agent;
     public Transform player;
-    public LayerMask whatIsGround, whatIsPlayer;
+    public LayerMask whatIsPlayer;
     public Animator animator;
 
-    public Vector3 walkPoint;
-    bool walkPointSet;
+    // Patrol variables
+    private Vector3 walkPoint;
+    private bool walkPointSet;
     public float walkPointRange;
 
+    // Attack variables
     public float timeBetweenAttacks;
-    bool alreadyAttacked;
+    private bool alreadyAttacked;
 
-    public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange;
+    // Detection ranges
+    public float sightRange;
+    public float attackRange;
+    private bool playerInSightRange;
+    private bool playerInAttackRange;
 
     public string gameOverSceneName = "GameOverScene";
 
@@ -30,54 +36,60 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
+        // Pause enemy movement when menus are open
         if (UIController.IsBookOpen || UIController.IsHelpOpen)
         {
             agent.SetDestination(transform.position);
-            ResetStates();
-
+            ResetAnimations();
             return;
         }
 
+        // Check if player is within sight or attack range
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        if (!playerInSightRange && !playerInAttackRange) Patroling();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-        if (playerInAttackRange && playerInSightRange) AttackPlayer();
+        // Decide behavior based on player's position
+        if (!playerInSightRange && !playerInAttackRange)
+            Patrol();
+
+        if (playerInSightRange && !playerInAttackRange)
+            ChasePlayer();
+
+        if (playerInAttackRange && playerInSightRange)
+            AttackPlayer();
     }
 
-    void ResetStates()
+    private void Patrol()
     {
-        animator.SetBool("isWalking", false);
-        animator.SetBool("isRunning", false);
-    }
+        // Search for a walk point if not set
+        if (!walkPointSet)
+            SearchWalkPoint();
 
-    private void Patroling()
-    {
-        if (!walkPointSet) SearchWalkPoint();
-
+        // Move to the walk point
         if (walkPointSet)
         {
             agent.SetDestination(walkPoint);
-            ResetStates();
+            ResetAnimations();
             animator.SetBool("isWalking", true);
         }
 
-        if (walkPointSet && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        // Reset walk point if reached
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             walkPointSet = false;
-            ResetStates();
+            animator.SetBool("isWalking", false);
         }
     }
 
     private void SearchWalkPoint()
     {
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
+        // Generate a random point within the walk point range
+        Vector3 randomPoint = transform.position +
+            new Vector3(Random.Range(-walkPointRange, walkPointRange), 0f,
+                        Random.Range(-walkPointRange, walkPointRange));
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-
-        if (NavMesh.SamplePosition(walkPoint, out NavMeshHit hit, walkPointRange, NavMesh.AllAreas))
+        // Validate the point on the NavMesh
+        if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, walkPointRange, NavMesh.AllAreas))
         {
             walkPoint = hit.position;
             walkPointSet = true;
@@ -86,43 +98,40 @@ public class EnemyAI : MonoBehaviour
 
     private void ChasePlayer()
     {
+        // Chase the player when detected
         agent.SetDestination(player.position);
-
-        ResetStates();
+        ResetAnimations();
         animator.SetBool("isRunning", true);
     }
 
     private void AttackPlayer()
     {
+        // Stop moving and face the player
         agent.SetDestination(transform.position);
         transform.LookAt(player);
+        ResetAnimations();
 
-        ResetStates();
+        // Prevent attack spamming
+        if (alreadyAttacked)
+            return;
 
-        if (!alreadyAttacked)
-        {
-            animator.SetTrigger("Attack");
-            alreadyAttacked = true;
+        animator.SetTrigger("Attack");
+        alreadyAttacked = true;
 
-            AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
-            float attackAnimLength = 0f;
-            foreach (AnimationClip clip in clips)
-            {
-                if (clip.name == "BearAttack")
-                {
-                    attackAnimLength = clip.length;
-                    break;
-                }
-            }
-
-            Invoke(nameof(LoadGameOver), attackAnimLength * 0.4f);
-            Invoke(nameof(ResetAttack), timeBetweenAttacks);
-        }
+        // Trigger game over after attack animation
+        Invoke(nameof(LoadGameOver), 0.4f);
+        Invoke(nameof(ResetAttack), timeBetweenAttacks);
     }
 
     private void ResetAttack()
     {
         alreadyAttacked = false;
+    }
+
+    private void ResetAnimations()
+    {
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isRunning", false);
     }
 
     private void LoadGameOver()

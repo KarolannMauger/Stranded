@@ -6,6 +6,7 @@ public class HungerBar : MonoBehaviour
     public float hunger = 100f;
     public float maxHunger = 100f;
     public Slider hungerSlider;
+
     private float distanceAccumulator = 0f;
     private float metersPerLoss = 75f;
 
@@ -39,8 +40,6 @@ public class HungerBar : MonoBehaviour
         hunger = Mathf.Clamp(hunger, 0f, maxHunger);
         UpdateUI();
     }
-
-    public bool IsEmpty() => hunger <= 0f;
 
     private void UpdateUI()
     {

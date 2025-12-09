@@ -6,6 +6,7 @@ public class ThirstBar : MonoBehaviour
     public float thirst = 100f;
     public float maxThirst = 100f;
     public Slider thirstSlider;
+
     private float distanceAccumulator = 0f;
     private float metersPerLoss = 50f;
 
@@ -40,8 +41,6 @@ public class ThirstBar : MonoBehaviour
         thirst = Mathf.Clamp(thirst, 0f, maxThirst);
         UpdateUI();
     }
-
-    public bool IsEmpty() => thirst <= 0f;
 
     private void UpdateUI()
     {

@@ -3,14 +3,17 @@ using UnityEngine.AI;
 
 public class NPCWander : MonoBehaviour
 {
+    // References
     public NavMeshAgent agent;
     public LayerMask whatIsGround;
     public Animator animator;
 
+    // Wander variables
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange = 10f;
 
+    // Wait variables
     public float minWaitTime = 2f;
     public float maxWaitTime = 5f;
     private float waitTimer;
@@ -24,6 +27,7 @@ public class NPCWander : MonoBehaviour
 
     private void Update()
     {
+        // Handle idle waiting
         if (isWaiting)
         {
             waitTimer -= Time.deltaTime;
@@ -31,24 +35,28 @@ public class NPCWander : MonoBehaviour
 
             if (waitTimer <= 0)
                 isWaiting = false;
+
+            return;
         }
-        else
-        {
-            Wander();
-        }
+        
+        Wander();
     }
 
     private void Wander()
     {
-        if (!walkPointSet) SearchWalkPoint();
+        // Search for a new walk point if not set
+        if (!walkPointSet)
+            SearchWalkPoint();
 
+        // Move to the walk point
         if (walkPointSet)
         {
             agent.SetDestination(walkPoint);
             animator.SetBool("isRunning", true);
         }
 
-        if (walkPointSet && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        // Reset walk point if reached
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             walkPointSet = false;
             isWaiting = true;
@@ -58,14 +66,15 @@ public class NPCWander : MonoBehaviour
 
     private void SearchWalkPoint()
     {
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
+        // Generate a random point within the walk point range
+        Vector3 randomPoint = transform.position +
+            new Vector3(Random.Range(-walkPointRange, walkPointRange), 10f, 
+                        Random.Range(-walkPointRange, walkPointRange));
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y + 10f, transform.position.z + randomZ);
-
-        if (Physics.Raycast(walkPoint, Vector3.down, out RaycastHit hit, 20f, whatIsGround))
+        // Validate the point is on the ground
+        if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, walkPointRange, NavMesh.AllAreas))
         {
-            walkPoint = hit.point;
+            walkPoint = hit.position;
             walkPointSet = true;
         }
     }
