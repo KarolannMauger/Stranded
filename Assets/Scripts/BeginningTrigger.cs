@@ -10,9 +10,15 @@ public class BeginningTrigger : MonoBehaviour
     [Header("UI Controller")]
     public UIController uiController;
 
+    private static bool hasTriggered = false;
+
     void Start()
     {
-        StartCoroutine(DelayedStart());
+        // do not trigger beginning sequence if player respawn
+        if (!hasTriggered)
+        {
+            StartCoroutine(DelayedStart());
+        }
     }
 
     IEnumerator DelayedStart()
@@ -34,5 +40,13 @@ public class BeginningTrigger : MonoBehaviour
                 uiController.ToggleHelp();
             }
         }
+
+        hasTriggered = true;
+    }
+
+    // to reset trigger when called from main menu
+    public static void ResetTrigger()
+    {
+        hasTriggered = false;
     }
 }
