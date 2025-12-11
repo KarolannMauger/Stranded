@@ -17,17 +17,27 @@ public class MainMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
-    // Assignée au bouton "Jouer"
+    // Assignée au bouton "Jouer", pour déclencher le jeu
     public void OnPlay()
     {
         if (!string.IsNullOrEmpty(gameSceneName))
         {
+            BeginningTrigger.ResetTrigger();
+
             Cursor.visible = false;
             _sceneController.LoadScene(gameSceneName);
         }
     }
 
-    // Assignée au bouton "Menu"
+    public void OnRespawn()
+    {
+        if (!string.IsNullOrEmpty(gameSceneName))
+        {
+            _sceneController.LoadScene(gameSceneName);
+        }
+    }
+
+    // Assignée au bouton "Menu", pour aller vers menu principal
     public void OnMenu()
     {
         if (!string.IsNullOrEmpty(menuSceneName))
