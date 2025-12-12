@@ -4,11 +4,12 @@ using System.Collections;
 
 public class ResourceHarvest : MonoBehaviour
 {
+    // Handles player interaction to collect mushrooms or rocks
     [Header("Harvest Settings")]
-    [Tooltip("Distance max pour pouvoir recolter")]
+    [Tooltip("Maximum distance for harvesting")]
     public float interactionDistance = 2f;
 
-    [Tooltip("UI a afficher quand le joueur est a portee (facultatif)")]
+    [Tooltip("UI to display when the player is in range (optional)")]
     public GameObject interactionUI;
 
     private Transform _player;
@@ -19,6 +20,7 @@ public class ResourceHarvest : MonoBehaviour
     {
         _runtime = GetComponent<TreeRuntimeInstance>();
 
+        // Cache player transform for distance checks
         var playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -26,7 +28,7 @@ public class ResourceHarvest : MonoBehaviour
         }
         else
         {
-            Debug.LogError("[ResourceHarvest] Aucun objet avec le tag 'Player' trouve.");
+            Debug.LogError("[ResourceHarvest] No object with tag 'Player' found.");
         }
 
         if (interactionUI != null)
@@ -35,6 +37,7 @@ public class ResourceHarvest : MonoBehaviour
 
     void Update()
     {
+        // Do nothing if no player or harvest already in progress
         if (_player == null || _isCollecting)
             return;
 
@@ -58,6 +61,7 @@ public class ResourceHarvest : MonoBehaviour
     {
         _isCollecting = true;
 
+        // Small delay so the input event and animation can settle
         yield return new WaitForSeconds(0.05f);
 
         MushroomInfo mushInfo = GetComponent<MushroomInfo>();
@@ -66,14 +70,16 @@ public class ResourceHarvest : MonoBehaviour
         {
             if (mushInfo != null)
             {
+                // Apply mushroom-specific effects and inventory tracking
                 GameInventory.Instance.EatMushroom(mushInfo.mushroomId);
                 MushroomEffectSwitcher.Apply(mushInfo.mushroomId);
-                Debug.Log($"[ResourceHarvest] Champignon recolte : {mushInfo.mushroomId}");
+                Debug.Log($"[ResourceHarvest] Mushroom harvested: {mushInfo.mushroomId}");
             }
             else
             {
+                // Default fallback: count as a rock resource
                 GameInventory.Instance.AddRock(1);
-                Debug.Log("[ResourceHarvest] Roche recoltee (+1 rock)");
+                Debug.Log("[ResourceHarvest] Rocks harvested (+1 rock)");
             }
         }
 

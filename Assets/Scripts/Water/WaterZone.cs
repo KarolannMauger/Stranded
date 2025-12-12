@@ -15,10 +15,11 @@ public class WaterZone : MonoBehaviour
 
     private void Awake()
     {
+        // Ensure a trigger collider is present
         _collider = GetComponent<Collider>();
         if (_collider == null)
         {
-            Debug.LogWarning($"[OCEAN] Aucun collider trouve sur '{name}', WaterZone desactive.");
+            Debug.LogWarning($"[OCEAN] No collider found on '{name}', WaterZone disabled.");
             enabled = false;
         }
     }
@@ -30,19 +31,20 @@ public class WaterZone : MonoBehaviour
 
         if (_collider != null && !_collider.isTrigger)
         {
-            Debug.LogWarning($"[OCEAN] Collider non trigger sur '{name}', WaterZone desactive (reserve aux triggers pour l'ocean).");
+            Debug.LogWarning($"[OCEAN] Collider is not a trigger on '{name}', WaterZone disabled (reserved for triggers for ocean).");
             enabled = false;
             return;
         }
 
+        // Hide prompt by default
         if (interactionUI != null)
             interactionUI.SetActive(false);
-
-        Debug.Log($"[OCEAN] WaterZone actif sur: {name}");
+        Debug.Log($"[OCEAN] WaterZone initialized on: {name}");
     }
 
     private void Update()
     {
+        // Only allow drinking when inside the zone and cooldown has passed
         if (!_playerInside || Keyboard.current == null)
             return;
 

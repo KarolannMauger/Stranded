@@ -11,7 +11,7 @@ public class UIController : MonoBehaviour
     [Header("Controllers")]
     [SerializeField] private MonoBehaviour cameraController;
     [SerializeField] private MonoBehaviour playerController;
-    
+
     public static bool IsBookOpen { get; private set; }
     public static bool IsHelpOpen { get; private set; }
 

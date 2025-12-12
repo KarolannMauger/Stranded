@@ -4,20 +4,20 @@ public class MainMenu : MonoBehaviour
 {
 
     [SerializeField]
-    private SceneController _sceneController; // manage les scenes avec ceci pour fadeout
+    private SceneController _sceneController; // Handles scene transitions with fade
 
-    [Header("Nom de la scène de jeu")]
+    [Header("Name of the game scene")]
     public string gameSceneName = "SampleScene";
     public string menuSceneName = "Scenes/StartScene";
 
     void Start()
     {
-        // S'assurer que le curseur est visible et déverrouillé dans les menus
+        // Keep the cursor visible and unlocked in menus
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
 
-    // Assignée au bouton "Jouer", pour déclencher le jeu
+    // Invoked by the Play button to start the game
     public void OnPlay()
     {
         if (!string.IsNullOrEmpty(gameSceneName))
@@ -37,19 +37,19 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    // Assignée au bouton "Menu", pour aller vers menu principal
+    // Invoked by the Menu button to return to the main menu
     public void OnMenu()
     {
         if (!string.IsNullOrEmpty(menuSceneName))
         {
-            // S'assurer que le curseur est visible avant de charger le menu
+            // Ensure the cursor is visible before loading the menu
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             _sceneController.LoadScene(menuSceneName);
         }
     }
 
-    //Assignée au bouton "Quitter"
+    // Invoked by the Quit button
     public void OnQuit()
     {
 #if UNITY_EDITOR

@@ -12,6 +12,7 @@ public class VitalBarsController : MonoBehaviour
 
     private void Start()
     {
+        // Grab component references from the same GameObject
         energyBar = GetComponent<EnergyBar>();
         thirstBar = GetComponent<ThirstBar>();
         hungerBar = GetComponent<HungerBar>();
