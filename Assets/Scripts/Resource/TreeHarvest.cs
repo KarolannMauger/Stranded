@@ -3,26 +3,27 @@ using System.Collections;
 
 public class TreeHarvest : MonoBehaviour
 {
+    // Manages tree HP, fall animation, and rewards on harvest
     [Header("Harvest Settings")]
     public int maxHealth = 10;
     public float interactionDistance = 3f;
     public GameObject interactionUI;
 
     [Header("Fall Settings")]
-    [Tooltip("Duree de la chute en secondes")]
+    [Tooltip("Duration of the fall in seconds")]
     public float fallDuration = 1.0f;
 
-    [Tooltip("Angle total de chute en degres")]
+    [Tooltip("Total fall angle in degrees")]
     public float fallAngle = 90f;
 
     [Header("Dust FX")]
-    [Tooltip("Prefab du ParticleSystem de poussiere")]
+    [Tooltip("Prefab of the dust ParticleSystem")]
     public ParticleSystem dustPrefab;
 
-    [Tooltip("Décalage vertical (Y) par rapport au sol pour la poussiere")]
+    [Tooltip("Vertical offset (Y) from the ground for the dust effect")]
     public float dustGroundOffsetY = 0.05f;
 
-    [Tooltip("Nombre de points de poussiere le long de larbre")]
+    [Tooltip("Number of dust points along the tree trunk")]
     public int dustSegments = 4;
 
     private int currentHealth;
@@ -43,6 +44,7 @@ public class TreeHarvest : MonoBehaviour
     {
         currentHealth = maxHealth;
 
+        // Link back to runtime manager if this tree is instanced
         _runtime = GetComponent<TreeRuntimeInstance>();
 
         var playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -52,12 +54,13 @@ public class TreeHarvest : MonoBehaviour
         }
         else
         {
-            Debug.LogError("[TreeHarvest] Aucun objet avec le tag 'Player' trouve.");
+            Debug.LogError("[TreeHarvest] No object with tag 'Player' found.");
         }
 
         if (interactionUI != null)
             interactionUI.SetActive(false);
 
+        // Estimate tree length and ground contact point for dust placement
         var rend = GetComponentInChildren<Renderer>();
         if (rend != null)
         {
@@ -80,6 +83,7 @@ public class TreeHarvest : MonoBehaviour
 
     void Update()
     {
+        // Show prompt only when player is close and tree still has HP
         if (_player == null) return;
 
         float dist = Vector3.Distance(_player.position, transform.position);
@@ -91,6 +95,7 @@ public class TreeHarvest : MonoBehaviour
 
     public void TakeDamage(int amount, Transform damageSource)
     {
+        // Ignore hits if out of range, already destroyed, or mid-fall
         if (currentHealth <= 0 || isFalling)
             return;
 
@@ -102,7 +107,7 @@ public class TreeHarvest : MonoBehaviour
         }
 
         currentHealth -= amount;
-        Debug.Log($"[TreeHarvest] {name} subit {amount} degats. HP: {currentHealth}/{maxHealth}");
+        Debug.Log($"[TreeHarvest] {name} takes {amount} damage. HP: {currentHealth}/{maxHealth}");
 
         if (currentHealth <= 0)
         {
@@ -143,6 +148,7 @@ public class TreeHarvest : MonoBehaviour
     {
         float t = 0f;
 
+        // Rotate the tree smoothly toward the target angle
         while (t < fallDuration)
         {
             t += Time.deltaTime;
@@ -151,6 +157,7 @@ public class TreeHarvest : MonoBehaviour
             
             transform.rotation = Quaternion.Slerp(startRot, targetRot, k);
 
+            // Trigger dust near the end of the fall
             if (!dustPlayed && k >= 0.95f)
             {
                 PlayDust();
@@ -178,6 +185,7 @@ public class TreeHarvest : MonoBehaviour
         if (dustSegments <= 0)
             dustSegments = 1;
 
+        // Dust direction follows the fall direction projected on the ground
         Vector3 dir = fallDirection;
         if (dir.sqrMagnitude < 0.001f)
             dir = transform.forward;
@@ -194,6 +202,7 @@ public class TreeHarvest : MonoBehaviour
         {
             float f = (i + 0.5f) / dustSegments;
 
+            // Spread dust along the trunk length in the fall direction
             Vector3 pos = bottomWorld + dir * (treeLength * f);
 
             ParticleSystem dust = Instantiate(dustPrefab, pos, Quaternion.identity);
@@ -213,6 +222,7 @@ public class TreeHarvest : MonoBehaviour
 
         if (_runtime != null && _runtime.manager != null)
         {
+            // Inform the runtime manager that this tree instance has been harvested
             _runtime.manager.HarvestTree(_runtime.treeIndex);
         }
         else

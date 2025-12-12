@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TerrainTreeDynamicManager : MonoBehaviour
 {
-    [Header("Références")]
+    [Header("References")]
     public Terrain terrain;
     public Transform player;
 
@@ -20,12 +20,13 @@ public class TerrainTreeDynamicManager : MonoBehaviour
 
     void Start()
     {
+        // Fallback to active terrain if not set in inspector
         if (terrain == null)
             terrain = Terrain.activeTerrain;
 
         if (terrain == null)
         {
-            Debug.LogError("[TreeManager] Aucun Terrain trouve.");
+            Debug.LogError("[TreeManager] No Terrain found.");
             enabled = false;
             return;
         }
@@ -38,7 +39,7 @@ public class TerrainTreeDynamicManager : MonoBehaviour
 
         if (player == null)
         {
-            Debug.LogError("[TreeManager] Aucun joueur trouve (tag Player ou assignation manuelle).");
+            Debug.LogError("[TreeManager] No player found with tag Player");
             enabled = false;
             return;
         }
@@ -48,6 +49,7 @@ public class TerrainTreeDynamicManager : MonoBehaviour
         _originalTrees = (TreeInstance[])_terrainData.treeInstances.Clone();
 
         int count = _originalTrees.Length;
+        // Track spawned tree instances and which ones were harvested
         _activeInstances = new GameObject[count];
         _harvested = new bool[count];
 
@@ -56,6 +58,7 @@ public class TerrainTreeDynamicManager : MonoBehaviour
 
     void Update()
     {
+        // Only process when setup is complete
         if (!_initialized || player == null || _terrainData == null) return;
 
         var trees = _terrainData.treeInstances;
@@ -78,6 +81,7 @@ public class TerrainTreeDynamicManager : MonoBehaviour
 
             if (dist <= spawnDist)
             {
+                // Spawn a runtime tree when the player gets close
                 if (_activeInstances[i] == null)
                 {
                     GameObject prefab = _terrainData.treePrototypes[original.prototypeIndex].prefab;
@@ -111,6 +115,7 @@ public class TerrainTreeDynamicManager : MonoBehaviour
             }
             else if (dist >= despawnDist)
             {
+                // Despawn and restore terrain tree scaling when far enough
                 if (_activeInstances[i] != null)
                 {
                     Destroy(_activeInstances[i]);
@@ -133,6 +138,7 @@ public class TerrainTreeDynamicManager : MonoBehaviour
 
     public void HarvestTree(int index)
     {
+        // Mark a tree as harvested and remove any spawned instance
         if (!_initialized) return;
         if (index < 0 || index >= _harvested.Length) return;
         if (_harvested[index]) return;

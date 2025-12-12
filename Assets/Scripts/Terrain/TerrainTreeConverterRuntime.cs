@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class TerrainTreeConverterRuntime : MonoBehaviour
 {
+    // Replaces terrain trees with prefab instances when the player is nearby
     public Terrain terrain;
     public Transform player;
     public float activationRadius = 20f;
@@ -18,7 +19,7 @@ public class TerrainTreeConverterRuntime : MonoBehaviour
 
         if (terrain == null)
         {
-            Debug.LogError("[TreeConverter] Aucun Terrain trouve.");
+            Debug.LogError("[TreeConverter] No Terrain found.");
             enabled = false;
             return;
         }
@@ -31,7 +32,7 @@ public class TerrainTreeConverterRuntime : MonoBehaviour
 
         if (player == null)
         {
-            Debug.LogError("[TreeConverter] Aucun Player trouve.");
+            Debug.LogError("[TreeConverter] No Player found.");
             enabled = false;
             return;
         }
@@ -44,6 +45,7 @@ public class TerrainTreeConverterRuntime : MonoBehaviour
 
     void Update()
     {
+        // Skip if something critical is missing
         if (player == null || _terrainData == null) return;
 
         var trees = _terrainData.treeInstances;
@@ -64,6 +66,7 @@ public class TerrainTreeConverterRuntime : MonoBehaviour
 
             if (dist <= activationRadius)
             {
+                // Spawn the runtime prefab and hide the terrain tree instance
                 GameObject prefab = prototypes[t.prototypeIndex].prefab;
                 if (prefab != null)
                 {
@@ -87,6 +90,7 @@ public class TerrainTreeConverterRuntime : MonoBehaviour
 
     private void OnDisable()
     {
+        // Restore original tree instances when this manager is turned off
         if (_terrainData != null && _originalTrees != null)
         {
             _terrainData.treeInstances = _originalTrees;

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class HungerBar : MonoBehaviour
 {
+    // Tracks hunger value and updates the UI slider
     public float hunger = 100f;
     public float maxHunger = 100f;
     public Slider hungerSlider;
@@ -12,6 +13,7 @@ public class HungerBar : MonoBehaviour
 
     private void Awake()
     {
+        // Find the UI slider in the scene if not assigned
         hungerSlider = GameObject.Find("HungerBar")?.GetComponent<Slider>();
     }
 
@@ -23,6 +25,7 @@ public class HungerBar : MonoBehaviour
 
     public void OnPlayerMoved(float metersMoved)
     {
+        // Consume hunger based on distance traveled
         distanceAccumulator += metersMoved;
 
         if (distanceAccumulator >= metersPerLoss)
@@ -36,6 +39,7 @@ public class HungerBar : MonoBehaviour
     }
     public void ConsumeMushroom(bool isToxic)
     {
+        // Good mushrooms restore, toxic ones reduce hunger
         hunger += isToxic ? -20f : 10f;
         hunger = Mathf.Clamp(hunger, 0f, maxHunger);
         UpdateUI();

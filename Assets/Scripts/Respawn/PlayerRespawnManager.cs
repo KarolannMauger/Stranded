@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerRespawnManager : MonoBehaviour
 {
+    // Singleton that stores the latest checkpoint and reloads the scene
     public static PlayerRespawnManager Instance;
 
     private Vector3 lastSavedPosition;
@@ -12,6 +13,7 @@ public class PlayerRespawnManager : MonoBehaviour
 
     private void Awake()
     {
+        // Persist across scenes; destroy duplicates
         if (Instance == null)
         {
             Instance = this;
@@ -25,12 +27,14 @@ public class PlayerRespawnManager : MonoBehaviour
 
     public void SaveCheckpoint(Vector3 playerPosition)
     {
+        // Remember the most recent checkpoint location
         lastSavedPosition = playerPosition;
         hasSavedData = true;
     }
 
     public void RespawnPlayer()
     {
+        // Reload the main scene so GameInitializer can place the player
         if (!hasSavedData)
             return;
 

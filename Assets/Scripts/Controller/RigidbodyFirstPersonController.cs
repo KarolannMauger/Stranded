@@ -11,6 +11,7 @@ namespace StarterAssets
 #endif
     public class RigidbodyFirstPersonController : MonoBehaviour
     {
+        // Basic movement, camera, and audio handling for a rigidbody-driven FPS controller
         [Header("Player")]
         public float MoveSpeed = 4.0f;
         public float SprintSpeed = 6.0f;
@@ -56,12 +57,14 @@ namespace StarterAssets
 
         private void Awake()
         {
+            // Locate the main camera used for rotation targets
             if (_mainCamera == null)
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
 
         private void Start()
         {
+            // Initialize components and lock rigidbody rotation
             _rb = GetComponent<Rigidbody>();
             _rb.freezeRotation = true;
             _input = GetComponent<StarterAssetsInputs>();
@@ -80,6 +83,7 @@ namespace StarterAssets
             
             if (audioSource != null)
             {
+                // Prevent sounds from playing automatically at startup
                 audioSource.playOnAwake = false;
                 audioSource.loop = false;
             }
@@ -99,6 +103,7 @@ namespace StarterAssets
 
         private void GroundedCheck()
         {
+            // Use a simple sphere cast to determine if the player is grounded
             Vector3 spherePosition = new Vector3(
                 transform.position.x,
                 transform.position.y + GroundedOffset,
@@ -113,6 +118,7 @@ namespace StarterAssets
 
         private void Move()
         {
+            // Determine movement speed based on sprint input
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
             if (_input.move == Vector2.zero)
                 targetSpeed = 0.0f;
@@ -156,6 +162,7 @@ namespace StarterAssets
         }
             private void PlayFootstepLoopSound()
             {
+                // Loop footsteps only while walking on the ground
                 if (audioSource != null && footstepSound != null)
                 {
                      if (!audioSource.isPlaying)
@@ -178,6 +185,7 @@ namespace StarterAssets
 
         private void Jump()
         {
+            // Apply jump impulse only when grounded
             if (_input.jump && Grounded)
             {
                 _input.jump = false;
@@ -207,6 +215,7 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
+            // Rotate camera pitch and player yaw based on look input
             if (_input.look.sqrMagnitude >= _threshold)
             {
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;

@@ -11,13 +11,12 @@ public class SceneController : MonoBehaviour
 
     private SceneFade _sceneFade;
 
-    // récupère composant scenefade
     private void Awake()
     {
+        // Find the SceneFade child component that handles the overlay
         _sceneFade = GetComponentInChildren<SceneFade>();
     }
 
-    // lance fadein au lancement du jeu
     private IEnumerator Start()
     {
         yield return _sceneFade.FadeInCoroutine(_sceneFadeDuration);

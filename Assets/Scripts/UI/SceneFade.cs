@@ -8,25 +8,26 @@ public class SceneFade : MonoBehaviour
 
     private void Awake()
     {
+        // Cache the Image component used for fading
         _sceneFadeImage = GetComponent<Image>();
     }
 
     public IEnumerator FadeInCoroutine(float duration)
     {
-        Color startColor = new Color(_sceneFadeImage.color.r, _sceneFadeImage.color.g, _sceneFadeImage.color.b, 1); // Couleur de début (opacité nulle)
-        Color targetColor = new Color(_sceneFadeImage.color.r, _sceneFadeImage.color.g, _sceneFadeImage.color.b, 0); // Couleur de fin (opacité totale)
+        Color startColor = new Color(_sceneFadeImage.color.r, _sceneFadeImage.color.g, _sceneFadeImage.color.b, 1); // Fully opaque
+        Color targetColor = new Color(_sceneFadeImage.color.r, _sceneFadeImage.color.g, _sceneFadeImage.color.b, 0); // Fully transparent
 
-        yield return FadeCoroutine(startColor, targetColor, duration); // fade out
-        gameObject.SetActive(false); // désactive l'objet
+        yield return FadeCoroutine(startColor, targetColor, duration); // Fade out overlay
+        gameObject.SetActive(false); // Disable overlay when done
     }
 
     public IEnumerator FadeOutCoroutine(float duration)
     {
-        Color startColor = new Color(_sceneFadeImage.color.r, _sceneFadeImage.color.g, _sceneFadeImage.color.b, 0); // Couleur de fin (opacité totale)
-        Color targetColor = new Color(_sceneFadeImage.color.r, _sceneFadeImage.color.g, _sceneFadeImage.color.b, 1); // Couleur de début (opacité nulle)
+        Color startColor = new Color(_sceneFadeImage.color.r, _sceneFadeImage.color.g, _sceneFadeImage.color.b, 0); // Fully transparent
+        Color targetColor = new Color(_sceneFadeImage.color.r, _sceneFadeImage.color.g, _sceneFadeImage.color.b, 1); // Fully opaque
 
-        gameObject.SetActive(true); // active l'objet
-        yield return FadeCoroutine(startColor, targetColor, duration); // fade in
+        gameObject.SetActive(true); // Enable overlay before fade
+        yield return FadeCoroutine(startColor, targetColor, duration); // Fade in overlay
     }
 
     private IEnumerator FadeCoroutine(Color startColor, Color targetColor, float duration)

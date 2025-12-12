@@ -4,6 +4,7 @@ public static class MushroomEffectSwitcher
 {
     public static void Apply(string mushroomId)
     {
+        // Find the player to apply hunger effects
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         if (player == null)
@@ -43,7 +44,8 @@ public static class MushroomEffectSwitcher
                 break;
 
             default:
-                Debug.LogWarning($"MushroomEffectSwitcher: Id inconnu '{mushroomId}'");
+                // Unknown id: warn and skip applying an effect
+                Debug.LogWarning($"MushroomEffectSwitcher: Id unknown '{mushroomId}'");
                 break;
         }
     }

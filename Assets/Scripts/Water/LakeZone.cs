@@ -13,14 +13,16 @@ public class LakeZone : MonoBehaviour
 
     private void Start()
     {
+        // Hide prompt by default
         if (interactionUI != null)
             interactionUI.SetActive(false);
-
-        Debug.Log($"[LAKE] LakeZone actif sur: {name}, waterId={waterId}");
+        
+        Debug.Log($"[LAKE] LakeZone initialized on: {name}, waterId={waterId}");
     }
 
     private void Update()
     {
+        // Do nothing if the player is not in the zone or no keyboard input
         if (!_playerInside || Keyboard.current == null)
             return;
 

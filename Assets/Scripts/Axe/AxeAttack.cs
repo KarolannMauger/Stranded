@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class AxeAttack : MonoBehaviour
 {
+    // Handles axe swing animation, raycast, and hit feedback
     [Header("References")]
     public Animator axeAnimator;
     public Transform cameraTransform;
@@ -22,6 +23,7 @@ public class AxeAttack : MonoBehaviour
 
     public void DoAttack()
     {
+        // Prevent overlapping attacks while the cooldown is active
         if (!canAttack)
             return;
 
@@ -39,9 +41,10 @@ public class AxeAttack : MonoBehaviour
 
     private void TryHitTree()
     {
+        // Ensure we have a valid camera to cast the ray from
         if (cameraTransform == null)
         {
-            Debug.LogWarning("[AxeAttack] CameraTransform non assigne.");
+            //Debug.LogWarning("[AxeAttack] CameraTransform not assigned.");
             return;
         }
 
@@ -60,13 +63,14 @@ public class AxeAttack : MonoBehaviour
     }
       private void PlayHitSound()
     {
+        // Play feedback only when both components are configured
         if (audioSource != null && hitSound != null)
         {
             audioSource.PlayOneShot(hitSound);
         }
         else
         {
-            Debug.LogWarning("[AxeAttack] AudioSource ou hitSound non assigne.");
+            //Debug.LogWarning("[AxeAttack] AudioSource or hitSound not assigned.");
         }
     }
 

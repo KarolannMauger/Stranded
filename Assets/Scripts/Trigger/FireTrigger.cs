@@ -18,7 +18,7 @@ public class FireTrigger : MonoBehaviour
 
     private void Start()
     {
-        // hide firecamp
+        // Hide the fire object until it is built
         if (fireObject != null)
         {
             fireObject.SetActive(false);
@@ -50,7 +50,7 @@ public class FireTrigger : MonoBehaviour
         
         if (!enter || fireBuilt) return;
 
-        // verify mission and ressources
+        // Only build when the correct mission is active
         if (MissionManager.Instance != null)
         {
             
@@ -71,7 +71,7 @@ public class FireTrigger : MonoBehaviour
             fireObject.SetActive(true);
         }
 
-        // alerte MissionManager
+        // Notify the MissionManager that the fire is built
         if (MissionManager.Instance != null)
         {
             MissionManager.Instance.OnFireBuilt();
@@ -79,7 +79,7 @@ public class FireTrigger : MonoBehaviour
     }
 
 
-    // prompt player to press key if correct mission going on
+    // Prompt the player to build the fire when in range and on the right mission
     private void OnGUI()
     {
         if (enter && !fireBuilt && 

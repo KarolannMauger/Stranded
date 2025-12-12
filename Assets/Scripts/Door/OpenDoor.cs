@@ -1,9 +1,10 @@
 using UnityEngine;
-using UnityEngine.InputSystem;   // Nouveau Input System
+using UnityEngine.InputSystem;
 using System.Collections;
 
 public class OpenDoor : MonoBehaviour
 {
+    // Controls door rotation and audio feedback when the player interacts
     [Header("Door Settings")]
     [SerializeField] private float smooth = 4.0f;
     [SerializeField] private float doorOpenAngle = 90.0f;
@@ -14,7 +15,7 @@ public class OpenDoor : MonoBehaviour
     [SerializeField] private AudioClip openDoorAudio;
 
     [Header("Input System")]
-    [Tooltip("Réfère à l'action 'Interact' dans ton Input Actions Asset")]
+    [Tooltip("Assign the Input Action Reference for 'Interact'")]
     public InputActionReference interactAction;
 
     [Header("UI Style")]
@@ -29,6 +30,7 @@ public class OpenDoor : MonoBehaviour
 
     private void Start()
     {
+        // Cache rotation targets and the door's audio source if available
         defaultRot = transform.eulerAngles;
         openRot = new Vector3(defaultRot.x, defaultRot.y + doorOpenAngle, defaultRot.z);
 
@@ -40,6 +42,7 @@ public class OpenDoor : MonoBehaviour
 
     private void OnEnable()
     {
+        // Subscribe to the input action when this component is active
         if (interactAction != null)
         {
             interactAction.action.performed += OnInteractPerformed;
@@ -47,12 +50,13 @@ public class OpenDoor : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("[OpenDoor] Aucun InputActionReference assigné pour Interact.");
+            //Debug.LogWarning("[OpenDoor] None InputActionReference assigned for Interact.");
         }
     }
 
     private void OnDisable()
     {
+        // Unsubscribe to avoid duplicate bindings or leaks
         if (interactAction != null)
         {
             interactAction.action.performed -= OnInteractPerformed;
@@ -62,7 +66,6 @@ public class OpenDoor : MonoBehaviour
 
     private void Update()
     {
-        // Rotation smooth de la porte
         if (open)
         {
             transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, openRot, Time.deltaTime * smooth);
@@ -73,10 +76,10 @@ public class OpenDoor : MonoBehaviour
         }
     }
 
-    // Appelée quand l'action "Interact" est déclenchée (E, bouton manette, etc.)
     private void OnInteractPerformed(InputAction.CallbackContext context)
     {
-        if (!enter) return; // On ne peut ouvrir que si le joueur est dans la zone
+        // Only toggle the door when the player is inside the trigger
+        if (!enter) return;
 
         open = !open;
 
@@ -84,11 +87,13 @@ public class OpenDoor : MonoBehaviour
         {
             if (open)
             {
+                // Slightly slower opening motion
                 smooth = 4.0f;
                 audioSource.clip = openDoorAudio;
             }
             else
             {
+                // Faster closing motion
                 smooth = 10.0f;
                 audioSource.clip = closeDoorAudio;
             }
@@ -123,7 +128,8 @@ public class OpenDoor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player entered the trigger area.");
+            //Debug.Log("Player entered the trigger area.");
+            // Allow interaction once the player is in range
             enter = true;
         }
     }
@@ -132,6 +138,7 @@ public class OpenDoor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            // Disable interaction prompt when leaving range
             enter = false;
         }
     }

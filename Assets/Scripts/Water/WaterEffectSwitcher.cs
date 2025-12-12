@@ -4,6 +4,7 @@ public static class WaterEffectSwitcher
 {
     public static void Apply(string waterId)
     {
+        // Locate the player to apply thirst effects
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         if (player == null)
@@ -33,7 +34,8 @@ public static class WaterEffectSwitcher
                 break;
 
             default:
-                Debug.LogWarning($"WaterEffectSwitcher: Id inconnu '{waterId}'");
+                // Unknown id: warn and skip applying an effect
+                Debug.LogWarning($"WaterEffectSwitcher: Id unknown '{waterId}'");
                 break;
         }
     }
