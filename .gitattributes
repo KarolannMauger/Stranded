@@ -18,3 +18,14 @@
 *.controller filter=lfs diff=lfs merge=lfs -text
 *.prefab filter=lfs diff=lfs merge=lfs -text
 *.unity filter=lfs diff=lfs merge=lfs -text
+
+# Ignore Unity shader files in language stats
+*.shader linguist-vendored
+*.cginc linguist-vendored
+*.hlsl linguist-vendored
+
+# (optionnel) Ignore other Unity generated files
+*.meta linguist-generated
+Library/** linguist-generated
+Temp/** linguist-generated
+Build/** linguist-generated
